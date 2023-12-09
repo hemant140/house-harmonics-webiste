@@ -3,9 +3,10 @@ import User from '../models/user.model.js';
 import { errorHandler } from '../utils/error.js';
 
 export const signUp = async (req, res, next) => {
-    const { fullName, username, email, mobile, address, password } = req.body;
+    console.log(req.body);
+    const { fullName, username, email, mobile, password } = req.body;
     const passwordIncrypt = bcryptjs.hashSync(password, 10);
-    const newUser = new User({ fullName, username, email, mobile, address, password: passwordIncrypt });
+    const newUser = new User({ fullName, username, email, mobile, password: passwordIncrypt });
     try {
         await newUser.save();
         res.json({
