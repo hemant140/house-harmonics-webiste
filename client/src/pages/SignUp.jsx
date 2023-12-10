@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { signInStart, signInSuccess, signInFailure } from '../redux/User/userSlice.js';
+import { signInStart, signInSuccess, signInFailure, resetSignInForm } from '../redux/User/userSlice.js';
 function SignUp() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -11,6 +11,7 @@ function SignUp() {
     const handleChange = (e) => {
         const fname = e.target.name;
         const fvalue = e.target.value;
+        dispatch(resetSignInForm())
         setFormData({
             ...formData,
             [fname]: fvalue
