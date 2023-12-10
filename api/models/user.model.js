@@ -15,9 +15,9 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    mobile: {
-        type: Number,
-        required: true,
+    avatar: {
+        type: String,
+        default: "https://cdn3d.iconscout.com/3d/premium/thumb/man-avatar-6299539-5187871.png?f=webp"
     },
     password: {
         type: String,

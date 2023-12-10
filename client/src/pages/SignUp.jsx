@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { signInStart, signInSuccess, signInFailure } from '../redux/User/userSlice.js';
 function SignUp() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const { loading, error } = useSelector((state) => state.user);
+
     const [formData, setFormData] = useState({})
     const handleChange = (e) => {
         const fname = e.target.name;
@@ -18,7 +20,7 @@ function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            setLoading(true);
+            dispatch(signInStart());
             const res = await fetch('/api/auth/signup', {
                 method: 'POST',
                 headers: {
@@ -29,17 +31,14 @@ function SignUp() {
 
             const data = await res.json();
             if (data.Status === 0) {
-                setLoading(false);
-                setError(data.Message);
+                dispatch(signInFailure(data.Message))
                 return;
             }
-            setLoading(false);
-            setError(null);
+            dispatch(signInSuccess(data));
             navigate('/sign-in');
 
         } catch (error) {
-            setLoading(false);
-            setError(error.message)
+            dispatch(signInFailure(error.message))
         }
 
     }
@@ -49,7 +48,6 @@ function SignUp() {
             <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                 <input type="text" required placeholder='fullname' onChange={handleChange} className='border p-3 rounded-lg' name='fullName' />
                 <input type="email" required placeholder='xyz@gmail.com' onChange={handleChange} className='border p-3 rounded-lg' name='email' />
-                <input type="number" required placeholder='mobile' onChange={handleChange} className='border p-3 rounded-lg' name='mobile' />
                 <input type="text" required placeholder='username' onChange={handleChange} className='border p-3 rounded-lg' name='username' />
                 <input type="password" required placeholder='password' onChange={handleChange} className='border p-3 rounded-lg' name='password' autoComplete="current-password" />
                 <button disabled={loading} className='bg-slate-700 text-white p-3
